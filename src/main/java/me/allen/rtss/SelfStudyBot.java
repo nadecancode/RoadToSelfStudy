@@ -74,6 +74,6 @@ public class SelfStudyBot {
     }
 
     private void registerTasks() {
-        TASK_EXECUTOR.scheduleAtFixedRate(new SSRunnable(), 0L, 1L, TimeUnit.MILLISECONDS);
+        TASK_EXECUTOR.scheduleAtFixedRate(new SSRunnable(), 0L, 1L, TimeUnit.MINUTES);
     }
 }

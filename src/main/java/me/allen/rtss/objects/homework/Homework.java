@@ -6,6 +6,7 @@ import lombok.EqualsAndHashCode;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.allen.rtss.SelfStudyBot;
+import me.allen.rtss.database.SSMongo;
 import me.allen.rtss.util.DateUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -26,14 +27,16 @@ public class Homework {
 
     private final String title, subject, content;
 
+    private String titleLower = this.title.toLowerCase();
+
     private boolean done = false;
 
     private final long assignDate, dueDate;
 
-    private boolean notified = false;
+    private boolean notified = false, finished = false;
 
     public boolean canNotify() {
-        return !this.isNotified() && System.currentTimeMillis() > this.dueDate - TimeUnit.HOURS.toMillis(6);
+        return !this.isNotified() && !this.isFinished() && System.currentTimeMillis() > this.dueDate - TimeUnit.HOURS.toMillis(6);
     }
 
     public boolean isDue() {
@@ -49,21 +52,36 @@ public class Homework {
     }
 
     public static List<Homework> matchHomeworkByDueDate(long dueDate) {
-        return homework.stream().filter(hw -> hw.getDueDate() == dueDate).collect(Collectors.toList());
+        return homework.stream().filter(hw -> DateUtil.formatDueDate(hw.getDueDate()).equalsIgnoreCase(DateUtil.formatDueDate(dueDate))).collect(Collectors.toList());
+    }
+
+    public void addToCache() {
+        if (homework.stream().anyMatch(hw -> hw.getTitle().equalsIgnoreCase(this.title))) return;
+
+        homework.add(this);
+    }
+
+    public void save() {
+        SSMongo.getInstance().addHomework(this);
+    }
+
+    public void delete() {
+        homework.remove(this);
+        SSMongo.getInstance().removeHomework(this);
     }
 
     public static Set<Homework> getHomeworks() {
         return new HashSet<>(homework);
     }
 
-    public void notifyWithBot() {
+    public void notifyWithBot(boolean remind) {
         SelfStudyBot.getInstance()
                 .getHomeworkChannel()
                 .sendMessage(
                         new EmbedBuilder()
                         .setAuthor("TheTsundereAllen")
                         .setColor(Color.CYAN)
-                        .setTitle("You received a new homework notification since you didn't mark this as finished homework!")
+                        .setTitle(remind ? "You received a new homework notification since you didn't mark this as finished homework!" : "The information of this homework has shown below")
                         .addField("Name", this.title, true)
                         .addField("Subject", this.subject, true)
                         .addField("Content", this.content, true)
