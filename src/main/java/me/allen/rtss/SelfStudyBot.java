@@ -58,7 +58,7 @@ public class SelfStudyBot {
         this.server = this.bot.getGuildById("612520734668881920");
 
         if (this.server == null) {
-            System.out.println("Server not found! Quitting");
+            System.out.println("Server not found! Quitting..");
             System.exit(-1);
             return;
         }

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import me.allen.rtss.SelfStudyBot;
 import me.allen.rtss.database.SSMongo;
+import me.allen.rtss.objects.homework.Homework;
 import me.allen.rtss.objects.reminder.Reminder;
 import me.allen.rtss.type.StudyType;
 import me.allen.rtss.util.DateUtil;
@@ -77,4 +78,7 @@ public class SelfStudy {
         SSMongo.getInstance().removeSelfStudy(this);
     }
 
+    public static SelfStudy matchStudyByName(String title) {
+        return selfStudies.stream().filter(study -> study.getTitle().equalsIgnoreCase(title)).findFirst().orElse(null);
+    }
 }

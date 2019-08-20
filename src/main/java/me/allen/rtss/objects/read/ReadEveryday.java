@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import me.allen.rtss.SelfStudyBot;
 import me.allen.rtss.database.SSMongo;
+import me.allen.rtss.objects.selfstudy.SelfStudy;
 import me.allen.rtss.type.StudyType;
 import me.allen.rtss.util.DateUtil;
 import me.allen.rtss.util.TimeUtil;
@@ -77,4 +78,7 @@ public class ReadEveryday {
         SSMongo.getInstance().removeReading(this);
     }
 
+    public static ReadEveryday matchReadByName(String title) {
+        return reads.stream().filter(read -> read.getTitle().equalsIgnoreCase(title)).findFirst().orElse(null);
+    }
 }

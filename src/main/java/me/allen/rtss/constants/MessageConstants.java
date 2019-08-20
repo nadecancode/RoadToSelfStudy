@@ -17,4 +17,22 @@ public class MessageConstants {
             .setDescription("**Your study type input is not defined. Available types are: " + String.join(", ", Stream.of(StudyType.values()).map(StudyType::getReadable).collect(Collectors.toSet())))
             .build();
 
+    public static final MessageEmbed HOMEWORK_NOT_FOUND = new EmbedBuilder()
+            .setTitle("Homework not found")
+            .setColor(Color.RED)
+            .setDescription("**Your specified homework is not defined in database, please check your name**")
+            .build();
+
+    public static final MessageEmbed SELF_STUDY_NOT_FOUND = new EmbedBuilder()
+            .setTitle("Self study not found")
+            .setColor(Color.RED)
+            .setDescription("**Your specified self study is not defined in database, please check your name**")
+            .build();
+
+    public static final MessageEmbed READING_NOT_FOUND = new EmbedBuilder()
+            .setTitle("Self study not found")
+            .setColor(Color.RED)
+            .setDescription("**Your specified reading subject is not defined in database, please check your name**")
+            .build();
+
 }

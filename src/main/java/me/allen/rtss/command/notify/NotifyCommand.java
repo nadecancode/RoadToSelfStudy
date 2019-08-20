@@ -8,6 +8,7 @@ import me.allen.rtss.objects.read.ReadEveryday;
 import me.allen.rtss.objects.reminder.Reminder;
 import me.allen.rtss.objects.selfstudy.SelfStudy;
 import me.allen.rtss.type.StudyType;
+import me.allen.rtss.util.CommandUtil;
 import me.allen.rtss.util.TimeUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 import net.dv8tion.jda.api.entities.Member;
@@ -28,22 +29,9 @@ public class NotifyCommand extends Command {
 
     @Override
     protected void execute(CommandEvent commandEvent) {
-        Member sender = commandEvent.getMember();
-        Message message = commandEvent.getMessage();
+        if (!CommandUtil.preprocessCommand(commandEvent)) return;
 
-        if (commandEvent.getArgs().isEmpty()) {
-            commandEvent.reply(MessageConstants.NO_STUDY_TYPE_FOUND);
-            return;
-        }
-
-        String type = commandEvent.getArgs().split("\\s+")[0];
-        StudyType studyType = StudyType.matchType(type);
-
-        if (studyType == null) {
-            commandEvent.reply(MessageConstants.NO_STUDY_TYPE_FOUND);
-            return;
-        }
-
+        StudyType studyType = StudyType.matchType(commandEvent.getArgs().split("//s+")[0]);
         EmbedBuilder embedBuilder = new EmbedBuilder();
 
         if (studyType == StudyType.HOMEWORK) {
