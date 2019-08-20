@@ -1,8 +1,11 @@
 package me.allen.rtss;
 
+import com.jagrosh.jdautilities.command.CommandClientBuilder;
 import lombok.Data;
 import lombok.Getter;
 import lombok.SneakyThrows;
+import me.allen.rtss.command.complete.MarkCompleteCommand;
+import me.allen.rtss.command.notify.NotifyCommand;
 import me.allen.rtss.runnable.SSRunnable;
 import net.dv8tion.jda.api.JDA;
 import net.dv8tion.jda.api.JDABuilder;
@@ -38,11 +41,18 @@ public class SelfStudyBot {
 
         this.loadConfig();
 
+        CommandClientBuilder client = new CommandClientBuilder();
+        client
+                .setActivity(Activity.watching("Everyone to learn"))
+                .setPrefix("!")
+                .addCommands(new NotifyCommand(), new MarkCompleteCommand());
+
         this.bot = new JDABuilder()
                 .setToken(this.token)
                 .setStatus(OnlineStatus.ONLINE)
                 .setActivity(Activity.watching("Everyone to Learn"))
                 .setAutoReconnect(true)
+                .addEventListeners(client.build())
                 .build();
 
         this.server = this.bot.getGuildById("612520734668881920");

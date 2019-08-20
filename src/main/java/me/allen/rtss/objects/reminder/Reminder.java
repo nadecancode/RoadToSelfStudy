@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import me.allen.rtss.SelfStudyBot;
 import me.allen.rtss.database.SSMongo;
+import me.allen.rtss.type.StudyType;
 import me.allen.rtss.util.TimeUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -11,7 +12,6 @@ import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.UUID;
 import java.util.concurrent.CopyOnWriteArrayList;
 
 @RequiredArgsConstructor
@@ -25,6 +25,8 @@ public class Reminder {
     private final String content;
 
     private final long time;
+
+    private final StudyType type = StudyType.REMINDER;
 
     public boolean canRemind() {
         return System.currentTimeMillis() >= this.time;

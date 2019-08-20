@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 import me.allen.rtss.SelfStudyBot;
 import me.allen.rtss.database.SSMongo;
+import me.allen.rtss.type.StudyType;
 import me.allen.rtss.util.DateUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
 
@@ -33,9 +34,17 @@ public class Homework {
 
     private final long assignDate, dueDate;
 
+    private long notifyLaterWhenNotCompleted = -1L;
+
     private boolean notified = false, finished = false;
 
+    private final StudyType type = StudyType.HOMEWORK;
+
     public boolean canNotify() {
+        if (notifyLaterWhenNotCompleted != -1L) {
+            return !this.isFinished() && System.currentTimeMillis() > this.notifyLaterWhenNotCompleted;
+        }
+
         return !this.isNotified() && !this.isFinished() && System.currentTimeMillis() > this.dueDate - TimeUnit.HOURS.toMillis(6);
     }
 

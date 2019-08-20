@@ -6,6 +6,8 @@ import me.allen.rtss.objects.read.ReadEveryday;
 import me.allen.rtss.objects.reminder.Reminder;
 import me.allen.rtss.objects.selfstudy.SelfStudy;
 
+import java.util.concurrent.TimeUnit;
+
 public class SSRunnable implements Runnable {
 
     @Override
@@ -13,11 +15,18 @@ public class SSRunnable implements Runnable {
     public void run() {
         Homework.getHomeworks()
                 .forEach(homework -> {
-                    if (homework.canNotify()) {
-                        homework.notifyWithBot(true);
-                    }
-
-                    if (homework.isFinished()) {
+                    if (!homework.isFinished()) {
+                        if (homework.canNotify()) {
+                            if (homework.getNotifyLaterWhenNotCompleted() != -1L) {
+                                homework.notifyWithBot(true);
+                                homework.setNotifyLaterWhenNotCompleted(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(10));
+                            } else {
+                                homework.notifyWithBot(true);
+                                homework.setNotified(true);
+                                homework.setNotifyLaterWhenNotCompleted(System.currentTimeMillis() + TimeUnit.MINUTES.toMillis(30));
+                            }
+                        }
+                    } else {
                         homework.delete();
                     }
                 });
@@ -26,16 +35,12 @@ public class SSRunnable implements Runnable {
                 .forEach(study -> {
                     if (study.canNotify()) {
                         study.notifyWithBot(true);
-                    } else if (study.isCompleted()) {
-                        study.delete();
                     }
                 });
 
         ReadEveryday.getReadings()
                 .forEach(reading -> {
-                    if (reading.isCompleted()) {
-                        reading.delete();
-                    } else if (reading.canNotify()){
+                    if (reading.canNotify()){
                         reading.notifyWithBot(true);
                     }
                 });

@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import me.allen.rtss.SelfStudyBot;
 import me.allen.rtss.database.SSMongo;
 import me.allen.rtss.objects.reminder.Reminder;
+import me.allen.rtss.type.StudyType;
 import me.allen.rtss.util.DateUtil;
 import me.allen.rtss.util.TimeUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -33,6 +34,8 @@ public class SelfStudy {
     private boolean completed = false;
 
     private long wishCompletionDate;
+
+    private final StudyType type = StudyType.REMINDER;
 
     public static Set<SelfStudy> getSelfStudies() {
         return new HashSet<>(selfStudies);

@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import me.allen.rtss.SelfStudyBot;
 import me.allen.rtss.database.SSMongo;
+import me.allen.rtss.type.StudyType;
 import me.allen.rtss.util.DateUtil;
 import me.allen.rtss.util.TimeUtil;
 import net.dv8tion.jda.api.EmbedBuilder;
@@ -30,6 +31,8 @@ public class ReadEveryday {
     private List<String> externalUrls = new ArrayList<>();
 
     private long readDuration = TimeUnit.MINUTES.toMillis(30); //Normally 30 Minutes Reading
+
+    private final StudyType type = StudyType.READ_EVERYDAY;
 
     public static HashSet<ReadEveryday> getReadings() {
         return new HashSet<>(reads);
