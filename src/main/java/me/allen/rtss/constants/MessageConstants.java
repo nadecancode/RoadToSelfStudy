@@ -35,4 +35,22 @@ public class MessageConstants {
             .setDescription("**Your specified reading subject is not defined in database, please check your name**")
             .build();
 
+    public static final MessageEmbed NO_ARGUMENT_PROVIDED = new EmbedBuilder()
+            .setTitle("Argument not found")
+            .setColor(Color.RED)
+            .setDescription("**You have to provide a valid argument**")
+            .build();
+
+    public static final MessageEmbed DUPLICATED_OBJECTS = new EmbedBuilder()
+            .setTitle("Duplicated Objects")
+            .setColor(Color.RED)
+            .setDescription("**Objects are duplicated, maybe by the title?**")
+            .build();
+
+    public static final MessageEmbed INVALID_DURATION = new EmbedBuilder()
+            .setTitle("Invalid Due Date")
+            .setColor(Color.RED)
+            .setDescription("**Please provide a valid duration for the assignment**")
+            .build();
+
 }
